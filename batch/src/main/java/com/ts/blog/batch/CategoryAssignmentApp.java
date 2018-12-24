@@ -18,15 +18,22 @@ import java.util.function.Function;
 public class CategoryAssignmentApp {
 
     public static void main(String[] args) {
-        SparkSession session = SparkSession.builder().master("local[*]").appName("CategoryAssignmentApp").
-                getOrCreate();
+        //spark://192.168.1.112:7077
+        //local[*]
+        SparkSession session = SparkSession.builder()
+                .master("spark://10.50.180.8:7077")
+                .appName("Spark shell")
+                .getOrCreate();
 
         //Parse supplied arguments
-        Options options = new Options().argsParser.apply(args);
+        Options options = Options.argsParser.apply(args);
 
 
         //Read CSV file using input arguments
-        Dataset<Row> ds = session.read().option("header", "true").csv(options.input);
+        //hdfs://s150:8020/usr/xiaoqiu/hadoop/index.html
+        //hdfs://10.50.180.8:10000/input/blog.csv
+        Dataset<Row> ds = session.read().option("header", "true").csv("hdfs://10.50.180.8:10000/input/blog.csv");
+        //Dataset<Row> ds = session.read().option("header", "true").csv(options.input);
         //See csv content
         ds.show(20);
 

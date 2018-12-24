@@ -31,9 +31,9 @@ public class CategoryAssignment implements FlatMapFunction<Iterator<Row>, Object
     private final String factPkg;
     private final String factClass;
 
-   public CategoryAssignment(String factPkg,String factClass){
+    public CategoryAssignment(String factPkg,String factClass){
         this.factPkg=factPkg;
-       this.factClass=factClass;
+        this.factClass=factClass;
     }
     @Override
     public Iterator<Object> call(Iterator<Row> rowIte) throws Exception {
@@ -53,7 +53,7 @@ public class CategoryAssignment implements FlatMapFunction<Iterator<Row>, Object
             throw new RuntimeException("Kie Fact not found: com.ts.blog.kie.Blog ");
         }
         List<FactField> blogField = type.getFields();
-        //System.out.println(blogField);
+        System.out.println(blogField);
         List output = new ArrayList();
         //Iterate through each record and assign category
         while (rowIte.hasNext()) {
@@ -91,7 +91,9 @@ public class CategoryAssignment implements FlatMapFunction<Iterator<Row>, Object
             kieSession.insert(blog);
             kieSession.setGlobal("LOGGER", LOGGER);
             //All set to fire rules
-            kieSession.fireAllRules();
+            int i = kieSession.fireAllRules();
+            System.out.println(blog.toString()+":命中"+i);
+
             kieSession.dispose();
             output.add(blog);
         }
